@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, Users, Award, Globe, ArrowRight } from 'lucide-react';
 import SectionHeading from '../../components/common/SectionHeading';
-import { clients } from '../../mockData';
+import { clients, testimonials } from '../../mockData';
+import Button from '../../components/common/Button';
 
 const ClientsPage = () => {
   const [selectedSector, setSelectedSector] = useState('all');
@@ -16,22 +17,22 @@ const ClientsPage = () => {
 
   const stats = [
     {
-      icon: <Building2 size={24} />,
+      icon: <Building2 size={24} className="text-primary-600 dark:text-yellow-500" />,
       value: '500+',
       label: 'Proyectos Completados'
     },
     {
-      icon: <Users size={24} />,
+      icon: <Users size={24} className="text-primary-600 dark:text-yellow-500" />,
       value: '1000+',
       label: 'Clientes Satisfechos'
     },
     {
-      icon: <Award size={24} />,
+      icon: <Award size={24} className="text-primary-600 dark:text-yellow-500" />,
       value: '15+',
       label: 'Años de Experiencia'
     },
     {
-      icon: <Globe size={24} />,
+      icon: <Globe size={24} className="text-primary-600 dark:text-yellow-500" />,
       value: '20+',
       label: 'Ciudades Atendidas'
     }
@@ -39,113 +40,162 @@ const ClientsPage = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-16">
-      <div className="container mx-auto px-4">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <SectionHeading
-            title="Nuestros Clientes"
-            subtitle="Trabajamos con organizaciones líderes en diversos sectores para desarrollar soluciones de ingeniería innovadoras."
-            centered
-          />
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-lg p-6 shadow-md"
-              >
-                <div className="text-primary-600 mb-3 flex justify-center">
-                  {stat.icon}
-                </div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-600">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Sector Filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {sectors.map((sector) => (
-            <button
-              key={sector.id}
-              onClick={() => setSelectedSector(sector.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedSector === sector.id
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {sector.name}
-            </button>
-          ))}
+      {/* Hero Section */}
+      <section className="relative bg-primary-900 dark:bg-gray-900 py-20 mb-16">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-900/95 to-primary-800/95 dark:from-gray-900/95 dark:to-gray-800/95" />
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center text-white"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Nuestros Clientes
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Trabajamos con organizaciones líderes en diversos sectores para desarrollar
+              soluciones de ingeniería innovadoras y sostenibles.
+            </p>
+          </motion.div>
         </div>
+      </section>
 
-        {/* Clients Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {clients.map((client, index) => (
+      <div className="container mx-auto px-4">
+        {/* Stats Section */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+          {stats.map((stat, index) => (
             <motion.div
-              key={client.id}
+              key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md text-center"
             >
-              <div className="p-6">
-                <div className="h-32 flex items-center justify-center mb-6">
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {client.name}
-                </h3>
-                {client.testimonial && (
-                  <p className="text-gray-600 italic mb-4">
-                    "{client.testimonial}"
-                  </p>
-                )}
-                <button className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium">
-                  Ver proyectos
-                  <ArrowRight size={16} className="ml-1" />
-                </button>
+              <div className="mb-3 flex justify-center">
+                {stat.icon}
+              </div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                {stat.value}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {stat.label}
               </div>
             </motion.div>
           ))}
         </div>
 
+        {/* Clients Section */}
+        <section className="mb-16">
+          <SectionHeading
+            title="Empresas que Confían en Nosotros"
+            subtitle="Colaboramos con organizaciones líderes en diversos sectores"
+            centered
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            {clients.map((client, index) => (
+              <motion.div
+                key={client.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-all duration-300"
+              >
+                <div className="p-8">
+                  <div className="h-32 flex items-center justify-center mb-6">
+                    <img
+                      src={client.logo}
+                      alt={client.name}
+                      className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center mb-4">
+                    {client.name}
+                  </h3>
+                  {client.testimonial && (
+                    <p className="text-gray-600 dark:text-gray-300 italic text-center mb-4">
+                      "{client.testimonial}"
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="mb-16">
+          <SectionHeading
+            title="Lo Que Dicen Nuestros Clientes"
+            subtitle="Testimonios de quienes han confiado en nosotros"
+            centered
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
+              >
+                <div className="mb-4">
+                  <svg className="h-8 w-8 text-primary-600 dark:text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 italic">
+                  "{testimonial.text}"
+                </p>
+                <div className="flex items-center">
+                  {testimonial.image && (
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="h-12 w-12 rounded-full object-cover mr-4"
+                    />
+                  )}
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-white">
+                      {testimonial.name}
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {testimonial.position}, {testimonial.company}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
         {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-16 text-center bg-primary-50 rounded-2xl p-12"
-        >
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            ¿Listo para ser parte de nuestra historia de éxito?
-          </h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Únete a nuestra creciente lista de clientes satisfechos y descubre cómo podemos ayudarte a alcanzar tus objetivos.
-          </p>
-          <button className="bg-primary-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors">
-            Contáctanos
-          </button>
-        </motion.div>
+        <section className="bg-primary-900 dark:bg-gray-800 rounded-3xl p-12 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h2 className="text-3xl font-bold text-white mb-6">
+              ¿Listo para ser parte de nuestra historia de éxito?
+            </h2>
+            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+              Únete a nuestra creciente lista de clientes satisfechos y descubre cómo
+              podemos ayudarte a alcanzar tus objetivos.
+            </p>
+            <Button
+              to="/contacto"
+              variant="yellow"
+              size="lg"
+              icon={<ArrowRight size={20} />}
+              iconPosition="right"
+            >
+              Contáctanos
+            </Button>
+          </motion.div>
+        </section>
       </div>
     </div>
   );
